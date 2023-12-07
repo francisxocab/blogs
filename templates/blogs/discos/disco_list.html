@@ -1,0 +1,8 @@
+{% extends 'blogs/base.html' %}
+{%block content%}
+    <ul> 
+        {% for disco in discos %} 
+            <a href="{% url 'disco_detail' disco.pk %}"> {{disco.nombre}} </a> 
+        {% endfor %} 
+    </ul>
+{% endblock %}
