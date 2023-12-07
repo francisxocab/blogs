@@ -1,0 +1,8 @@
+{% extends 'blogs/base.html' %}
+{%block content%}
+    <ul> 
+        {% for cancion in canciones %} 
+            <a href="{% url 'cancion_detail' cancion.pk %}"> {{cancion.nombre}} </a> 
+        {% endfor %} 
+    </ul>
+{% endblock %}
