@@ -1,0 +1,8 @@
+{% extends 'blogs/base.html' %}
+{%block content%}
+    <ul> 
+        {% for produccion in producciones %} 
+            <a href="{% url 'produccion_detail' produccion.pk %}"> {{produccion.nombre}} </a> 
+        {% endfor %} 
+    </ul>
+{% endblock %}

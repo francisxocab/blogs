@@ -1,0 +1,11 @@
+{% extends 'blogs/base.html' %}
+
+{%block content%}
+    <h2> Eliminar Cancion-Disco</h2>
+    <p>¿Estás seguro de que deseas eliminar "{{canciondisco}}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type= "submit">Sí, eliminar</button>
+    </form>
+    <a href="{%url 'cancion_disco_list' %}">Cancelar</a>    
+{% endblock %}
