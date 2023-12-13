@@ -1,54 +1,78 @@
 from django.db import models
+from django.utils.text import slugify
+from django.contrib.auth.models import User
+from ckeditor.fields import RichTextField
+from apps.users.models import Perfil
 
 class Disco(models.Model):
-    nombre = models.CharField(max_length=50)
-    fecha_lanzamiento = models.DateField()
-    duracion = models.CharField(max_length=50)
-    generos = models.CharField(max_length=50)
-    formato = models.CharField(max_length=50)
-    precio = models.IntegerField() 
-    imagen = models.ImageField(upload_to= 'disco_images/')
+    nombre = models.CharField(max_length=200, unique=True)
+    
+    class Meta:
+        ordering = ('nombre',)
+ 
     def __str__(self):
-        return f'{self.nombre} - {self.fecha_lanzamiento} - {self.duracion} - {self.generos} - {self.formato} - {self.precio}'
+        return self.nombre
 
 class Cancion(models.Model):
-    nombre = models.CharField(max_length=50)
-    fecha_lanzamiento = models.DateField()
-    duracion = models.IntegerField()
-    genero = models.IntegerField()
+    nombre = models.CharField(max_length=50, unique=True)
+    
+    class Meta:
+        ordering = ('nombre',)
     
     def __str__(self):
-        return f'{self.nombre} - {self.fecha_lanzamiento} - {self.duracion} - {self.genero}'
+        return self.nombre
 
 class CancionDisco(models.Model):
     cancion = models.ForeignKey(Cancion, on_delete=models.CASCADE)
     disco = models.ForeignKey(Disco, on_delete=models.CASCADE)
+    
+    class Meta:
+        ordering = ('cancion',)
     
     def __str__(self):
         return f'{self.cancion} - {self.disco}'
 
 
 class Artista(models.Model):
-    cancion_disco = models.ForeignKey(CancionDisco, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    perfil = models.ForeignKey(Perfil, on_delete=models.PROTECT)
+    titulo = models.CharField(max_length=255, unique=True)
+    url = models.SlugField(max_length=255, unique=True)
+    resumen = RichTextField()
+    contenido = RichTextField()
+    vistas = models.PositiveIntegerField(default=0)
+    destacado = models.BooleanField(default=False)
+    
+    cancion_disco = models.ForeignKey(CancionDisco, on_delete=models.PROTECT)
     visible = models.BooleanField(default=True)
     nombre = models.CharField(max_length=50)
-    debut = models.IntegerField()
+    debut = models.PositiveIntegerField()
     ciudad_de_origen = models.CharField(max_length=50)
+    imagen = models.ImageField (upload_to='artista/images/')
+    
+    creado = models.DateTimeField(auto_now_add=True)
+    modificado = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ('creado',)
+    
+    def save(self, *args, **kwargs):
+        self.url = slugify(self.titulo)
+        super(Artista, self).save(*args, **kwargs)  
+    
     
     def __str__(self):
-        return f'{self.nombre} - {self.debut} - {self.ciudad_de_origen}' 
+        return f'{self.cancion_disco} - {self.user.username}'
 
-class Compositor(models.Model):
-    nombre = models.CharField(max_length=50)
-    
-    def __str__(self):
-        return f'{self.nombre}'
 
-class Produccion(models.Model):
-    estudio_de_grabacion = models.CharField(max_length=50)
-    def __str__(self):
-        return f'{self.estudio_de_grabacion}'
-    
+class Comentario(models.Model):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    perfil = models.ForeignKey(Perfil, on_delete=models.PROTECT)
+    artista = models.ForeignKey(Artista, on_delete=models.PROTECT)
+    comentario = models.CharField(max_length=5000)
+    visible = models.BooleanField(default=True)
+    creado = models.DateTimeField(auto_now_add=True) 
+
 
 
 # Create your models here.
