@@ -5,6 +5,10 @@ from .models import Perfil
 
 
 class RegistroForm(forms.Form):
+    class Meta:
+        model: User
+        fields: ['email', 'username', 'password', 'password_confirmation']
+
     email = forms.CharField(
         min_length=6,
         max_length=70,

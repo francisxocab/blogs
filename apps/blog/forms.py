@@ -1,11 +1,12 @@
 from django import forms
+from django.db import models
 from ckeditor.widgets import CKEditorWidget
 from .models import Comentario, Artista, CancionDisco
 
 
 class CrearComentarioForm(forms.ModelForm):
 
-    comentario = forms.CharField(widget=forms.Textarea)
+    comentario = forms.CharField(required= True, widget=forms.Textarea)
 
     class Meta:
         model = Comentario
@@ -38,5 +39,9 @@ class AutoForm(forms.ModelForm):
         widget=forms.Select(attrs={'class': 'form-control'})
     )
     visible = forms.BooleanField(
+        required=False,
         widget=forms.CheckboxInput()
+    )
+    imagen = forms.ImageField(
+        widget=forms.FileInput(attrs={'class': 'form-control-file'})
     )

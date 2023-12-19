@@ -44,7 +44,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <li class="nav-item active">
-                <a class="navbar-brand" href="{% url 'blog:inicio' %}">Inicio
+              <a class="nav-link" href="{% url 'blog:inicio' %}">Inicio
                 <span class="sr-only">(current)</span>
               </a>
             </li>
@@ -78,7 +78,7 @@
 
                     {% if user.groups.all.0.name == 'Colaborador' or user.groups.all.0.name == 'Administrador' %}
 
-                      <li><a class="dropdown-item" href="{% url 'blogs:carga_artista' %}">Cargar Artista</a></li>
+                      <li><a class="dropdown-item" href="{% url 'blog:carga_artista' %}">Cargar Artista</a></li>
                       
                     {% endif %}
 
@@ -114,7 +114,7 @@
       <div class="row">
         <div class="col-lg-12">
           <ul class="social-icons">
-            <li><a href="#">Facebook</a></li>
+            <li><a href="https://github.com/francisxocab">Github</a></li>
             <li><a href="#">Twitter</a></li>
             <li><a href="#">Behance</a></li>
             <li><a href="#">Linkedin</a></li>
@@ -125,7 +125,7 @@
           <div class="copyright-text">
             <p>Copyright 2023 TeamThree
 
-              | Design: <a rel="nofollow" href="https://miguelpuente.com.ar" target="_parent">Miguel Puente</a></p>
+              | Developed by: <a rel="nofollow" href="https://miguelpuente.com.ar" target="_parent">Team 3</a></p>
           </div>
         </div>
       </div>

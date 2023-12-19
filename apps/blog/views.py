@@ -14,13 +14,43 @@ from .forms import CrearComentarioForm, AutoForm
 class ArtistaCreateView(CreateView):
     model = Artista 
     form_class = AutoForm
-    template_name = 'blog/artista/crear_artista.html'
+    template_name = 'blogs/artista/crear_artista.html'
     success_url = reverse_lazy('artista:inicio')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.instance.perfil = self.request.user.perfil
         return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['accion'] = 'Agregar Artista'
+        return context
+
+class ArtistaUpdateView(UpdateView):
+    model = Artista
+    form_class = AutoForm
+    template_name = 'blogs/artista/crear_artista.html'
+    slug_field = 'url'
+    slug_url_kwarg = 'url'
+    success_url = reverse_lazy('artista:inicio')
+
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.perfil = self.request.user.perfil
+        return super().form_valid(form)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['accion'] = 'Actualizar Artista'
+        return context
+    
+class ArtistaDeleteView(DeleteView):
+    model = Artista
+    slug_field = 'url'
+    slug_url_kwarg = 'url'
+    success_url = reverse_lazy('artista:inicio')
 
 class InicioListView(ListView):
     model = Artista
@@ -48,7 +78,7 @@ class ContactoTemplateView(TemplateView):
 
 class ArtistaDetailView(DetailView):
     model = Artista
-    template_name = 'blogs/detail.html'
+    template_name = 'blogs/detalle.html'
     context_object_name = 'artista'
     slug_field = 'url'
     slug_url_kwarg = 'url'
@@ -64,7 +94,7 @@ class ArtistaDetailView(DetailView):
         return context
 
 class ComentarioView(UserPassesTestMixin, View):
-    template_name = 'blogs/detail.html'
+    template_name = 'blogs/detalle.html'
 
     def test_func(self):
         allowed_groups = ['Colaborador', 'Administrador', 'Registrado']
@@ -87,9 +117,6 @@ class ComentarioView(UserPassesTestMixin, View):
             return redirect('blog:detalle', url=url)
         else:
             return HttpResponse(status=500)
-
-
-
 
 
 class CancionListView(ListView):
@@ -123,12 +150,12 @@ class UserListView(ListView):
     ordering = ('-creado',)
 
     def get_queryset(self):
-        auto = None
+        artista = None
         if self.kwargs['nombre']:
             user_nombre = self.kwargs['nombre']
             user = User.objects.filter(username=user_nombre)[:1]
-            auto = Artista.objects.filter(visible=True, user=user)
-        return auto
+            artista = Artista.objects.filter(visible=True, user=user)
+        return artista
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

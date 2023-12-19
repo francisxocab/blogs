@@ -37,7 +37,7 @@
                       <span>{{ artista.resumen|safe}}</span>
                       <h4>{{ artista.cancion_disco }}</h4>
                       <ul class="post-info">
-                        <li><a href={% url 'myspecials:user' artista.user %}>{{ artista.user }}</a></li>
+                        <li><a href={% url 'blog:user' artista.user %}>{{ artista.user }}</a></li>
                         <li><a href="#">{{ artista.creado|date: "d M Y" }}</a></li>
                         <li><a href="#">
                           {% if cantidad_comentarios < 1 %}
@@ -55,7 +55,7 @@
                                 <div class="col-3">
                                   <ul class="post-share">
                                     <li><i class="fa fa-arrow-left"></i></li>
-                                    <li><a href="{% url 'agencia:inicio' %}">Volver</a></li>
+                                    <li><a href="{% url 'blog:inicio' %}">Volver</a></li>
                                   </ul>
                                 </div>
                                 <div class="col-7">
@@ -140,7 +140,7 @@
                       <h2>Tu comentario</h2>
                     </div>
                     <div class="content">
-                      <form method="POST" action="{% url "artista:comentario" %}">
+                      <form method="POST" action="{% url "blog:comentario" %}">
                         {% csrf_token %}
                         <div class="row">
 
@@ -194,7 +194,7 @@
                       {% for for artista in artistas %}
                         {% if forloop.counter <= 3 %}
                           <li>
-                            <a href="{% url "artista:detalle" artista.url %}">
+                            <a href="{% url "blog:detalle" artista.url %}">
                               <h5>{{ artista.titulo }}</h5>
                               <span>{{ artista.creado }}</span>
                             </a>
@@ -216,12 +216,12 @@
                   <div class="content">
                     <ul>
 
-                      <!-- Inicio Marcas-->
+                      <!-- Inicio Posts canciones-->
                       {% for cancion in canciones %}
-                      <li><a href="{% url 'artista:cancion' cancion.id %}">{{ cancion.nombre }}</a></li>
+                      <li><a href="{% url 'blog:cancion' cancion.id %}">{{ cancion.nombre }}</a></li>
                       {% endfor %}
                       
-                      <!-- Fin Marcas-->
+                      <!-- Fin Posts-->
                   
                     </ul>
                   </div>
