@@ -191,7 +191,7 @@
                     <ul>
 
                       <!-- Inicio Posts reciente-->
-                      {% for for artista in artistas %}
+                      {% for artista in artistas %}
                         {% if forloop.counter <= 3 %}
                           <li>
                             <a href="{% url "blog:detalle" artista.url %}">
