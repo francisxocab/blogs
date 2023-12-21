@@ -38,7 +38,7 @@
                       <h4>{{ artista.cancion_disco }}</h4>
                       <ul class="post-info">
                         <li><a href={% url 'blog:user' artista.user %}>{{ artista.user }}</a></li>
-                        <li><a href="#">{{ artista.creado|date: "d M Y" }}</a></li>
+                        <li><a href="#">{{ artista.creado}}</a></li>
                         <li><a href="#">
                           {% if cantidad_comentarios < 1 %}
                             {{ cantidad_comentarios }} Comentario 

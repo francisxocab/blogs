@@ -15,7 +15,7 @@ class ArtistaCreateView(CreateView):
     model = Artista 
     form_class = AutoForm
     template_name = 'blogs/artista/crear_artista.html'
-    success_url = reverse_lazy('artista:inicio')
+    success_url = reverse_lazy('blog:inicio')
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -33,7 +33,7 @@ class ArtistaUpdateView(UpdateView):
     template_name = 'blogs/artista/crear_artista.html'
     slug_field = 'url'
     slug_url_kwarg = 'url'
-    success_url = reverse_lazy('artista:inicio')
+    success_url = reverse_lazy('blog:inicio')
 
 
     def form_valid(self, form):
@@ -50,7 +50,7 @@ class ArtistaDeleteView(DeleteView):
     model = Artista
     slug_field = 'url'
     slug_url_kwarg = 'url'
-    success_url = reverse_lazy('artista:inicio')
+    success_url = reverse_lazy('blog:inicio')
 
 class InicioListView(ListView):
     model = Artista
@@ -88,9 +88,9 @@ class ArtistaDetailView(DetailView):
         context['artistas'] = Artista.objects.filter(visible=True)
         context['canciones'] = Cancion.objects.all()
         context['comentarios'] = Comentario.objects.filter(
-            visible=True, auto=self.get_object()).all()
+            visible=True, artista=self.get_object()).all()
         context['cantidad_comentarios'] = Comentario.objects.filter(
-            visible=True, auto=self.get_object()).all().count()
+            visible=True, artista=self.get_object()).all().count()
         return context
 
 class ComentarioView(UserPassesTestMixin, View):

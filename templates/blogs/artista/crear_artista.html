@@ -23,9 +23,9 @@
         {% csrf_token %}
         {{ form.media }}
         {{ form.as_p }}
-        <a class="btn btn-danger my-5" href="{% url "artista:inicio" %}">Cancelar</a>
+        <a class="btn btn-danger my-5" href="{% url "blog:inicio" %}">Cancelar</a>
         <button type="submit" class="btn btn-primary my-5">
-          {% if accion == 'Agregar Auto' %}
+          {% if accion == 'Agregar Artista' %}
           Cargar Artista
           {% else %}
           Actualizar Artista

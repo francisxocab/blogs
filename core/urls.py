@@ -22,5 +22,9 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(('apps.blog.urls'), namespace = 'blog')),
-    path('auth', include(('apps.users.urls'), namespace = 'auth')),
+    path('auth/', include(('apps.users.urls'), namespace = 'auth')),
 ]
+
+# Configuración para servir archivos de medios durante el desarrollo
+urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
