@@ -73,6 +73,13 @@ class Comentario(models.Model):
     visible = models.BooleanField(default=True)
     creado = models.DateTimeField(auto_now_add=True) 
 
+class Contacto(models.Model):
+    nombre = models.CharField(max_length=70)
+    email = models.EmailField(max_length=50)
+    asunto = models.CharField(max_length=100)
+    mensaje = models.TextField()
+    creado = models.DateTimeField(auto_now_add=True)
+    modificado = models.DateTimeField(auto_now=True)
 
 
 # Create your models here.

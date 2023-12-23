@@ -1,7 +1,6 @@
 from django import forms
-from django.db import models
 from ckeditor.widgets import CKEditorWidget
-from .models import Comentario, Artista, CancionDisco
+from .models import Comentario, Artista, CancionDisco, Contacto
 
 
 class CrearComentarioForm(forms.ModelForm):
@@ -17,7 +16,7 @@ class AutoForm(forms.ModelForm):
     class Meta:
         model = Artista
         fields = ['titulo', 'resumen', 'contenido', 'destacado', 'cancion_disco',
-                  'visible', 'imagen']
+                  'visible', 'debut', 'imagen']
 
     titulo = forms.CharField(
         widget=forms.TextInput(
@@ -44,4 +43,42 @@ class AutoForm(forms.ModelForm):
     )
     imagen = forms.ImageField(
         widget=forms.FileInput(attrs={'class': 'form-control-file'})
+    )
+    
+    class ContactoForm(forms.ModelForm):
+        class Meta:
+            model = Contacto
+            fields = ('nombre', 'email', 'asunto', 'mensaje')
+
+    nombre = forms.CharField(
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Nombre y Apellido'}
+        )
+    )
+    email = forms.EmailField(
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Email'}
+        )
+    )
+    asunto = forms.CharField(
+        required=True,
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Asunto'}
+        )
+    )
+    mensaje = forms.CharField(
+        required=True,
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Mensaje'}
+        )
     )

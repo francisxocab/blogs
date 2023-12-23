@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import InicioListView, NosotrosTemplateView, ContactoTemplateView, ArtistaDetailView, ArtistaCreateView, ArtistaUpdateView, ArtistaDeleteView, ComentarioView, CancionListView, UserListView
+from .views import InicioListView, NosotrosTemplateView, ContactoTemplateView, ArtistaDetailView, ArtistaCreateView, ArtistaUpdateView, ArtistaDeleteView, ComentarioCreateView, ComentarioDeleteView, CancionListView, UserListView
 
 app_name = 'apps.blog'
 
@@ -41,8 +41,13 @@ urlpatterns = [
     ),
     path(
         route='comentario/',
-        view=ComentarioView.as_view(),
+        view=ComentarioCreateView.as_view(),
         name='comentario'
+    ),
+    path(
+        route='eliminar_comentario/<int:pk>/',
+        view=ComentarioDeleteView.as_view(),
+        name='eliminar_comentario'
     ),
     path(
         route='cancion/<int:cancion_id>/',

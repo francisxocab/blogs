@@ -4,7 +4,7 @@ from .models import Disco, Cancion, Artista, CancionDisco, Comentario
 
 @admin.register(Artista)
 class ArtistaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user', 'titulo', 'cancion_disco',
+    list_display = ('id', 'user', 'titulo', 'debut', 'cancion_disco',
                     'destacado', 'visible', 'imagen')
     search_fields = ('titulo', 'user__username', 'user__email')
     list_filter = ('creado', 'modificado')

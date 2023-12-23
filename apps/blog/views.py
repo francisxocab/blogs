@@ -1,6 +1,7 @@
-
+import os
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import UserPassesTestMixin
+from django.http import HttpResponse, HttpResponseForbidden, HttpResponseServerError
 from django.contrib.auth.decorators import login_required
 from django.forms.models import BaseModelForm
 from django.http import HttpResponse
@@ -11,11 +12,16 @@ from django.views.generic import TemplateView, ListView, DetailView, CreateView,
 from .models import Cancion, Artista, Comentario
 from .forms import CrearComentarioForm, AutoForm
 
-class ArtistaCreateView(CreateView):
+class ArtistaCreateView(UserPassesTestMixin, CreateView):
     model = Artista 
     form_class = AutoForm
     template_name = 'blogs/artista/crear_artista.html'
     success_url = reverse_lazy('blog:inicio')
+    login_url = reverse_lazy('auth:login')
+
+    def test_func(self):
+        grupos = ['Administrador', 'Colaborador']
+        return self.request.user.is_authenticated and any(self.request.user.groups.filter(name=grupo).exists() for grupo in grupos)
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -27,13 +33,19 @@ class ArtistaCreateView(CreateView):
         context['accion'] = 'Agregar Artista'
         return context
 
-class ArtistaUpdateView(UpdateView):
+class ArtistaUpdateView(UserPassesTestMixin, CreateView):
     model = Artista
     form_class = AutoForm
     template_name = 'blogs/artista/crear_artista.html'
     slug_field = 'url'
     slug_url_kwarg = 'url'
     success_url = reverse_lazy('blog:inicio')
+    login_url = reverse_lazy('auth:login')
+
+    def test_func(self):
+        grupos = ['Administrador']
+        return self.request.user.is_authenticated and any(self.request.user.groups.filter(name=grupo).exists() for grupo in grupos) or self.request.user == self.get_object().user
+
 
 
     def form_valid(self, form):
@@ -46,11 +58,33 @@ class ArtistaUpdateView(UpdateView):
         context['accion'] = 'Actualizar Artista'
         return context
     
-class ArtistaDeleteView(DeleteView):
+class ArtistaDeleteView(UserPassesTestMixin, CreateView):
     model = Artista
     slug_field = 'url'
     slug_url_kwarg = 'url'
     success_url = reverse_lazy('blog:inicio')
+    login_url = reverse_lazy('auth:login')
+
+    def test_func(self):
+        grupos = ['Administrador']
+        return self.request.user.is_authenticated and any(self.request.user.groups.filter(name=grupo).exists() for grupo in grupos) or self.request.user == self.get_object().user
+
+    def form_valid(self, form):
+        # Obtener el objeto Auto
+        artista = self.get_object()
+
+        # Eliminar la imagen adociada
+        if artista.imagen:
+            # Obtener la ruta completa del archivo de imagen
+            image_path = artista.imagen.path
+
+            # Verificar si el archivo existe y eliminarlo
+            if os.path.exists(image_path):
+                os.remove(image_path)
+
+        return super().form_valid(form)
+
+
 
 class InicioListView(ListView):
     model = Artista
@@ -93,30 +127,44 @@ class ArtistaDetailView(DetailView):
             visible=True, artista=self.get_object()).all().count()
         return context
 
-class ComentarioView(UserPassesTestMixin, View):
+class ComentarioCreateView(UserPassesTestMixin, CreateView):
+    model = Comentario
+    form_class = CrearComentarioForm
     template_name = 'blogs/detalle.html'
+    login_url = reverse_lazy('auth:login')
 
     def test_func(self):
-        allowed_groups = ['Colaborador', 'Administrador', 'Registrado']
-        return self.request.user.is_authenticated and any(self.request.user.groups.filter(name=group).exists() for group in allowed_groups)
+        grupos = ['Colaborador', 'Administrador', 'Registrado']
+        return self.request.user.is_authenticated and any(self.request.user.groups.filter(name=grupo).exists() for grupo in grupos)
 
     def get(self, request, *args, **kwargs):
-        return HttpResponse(status=405)
+        return HttpResponseForbidden("Acceso denegado. Método no permitido.")
 
-    def post(self, request, *args, **kwargs):
-        url = request.POST.get('url')
-        auto = {
-            'user': request.user.id,
-            'perfil': request.user.perfil.id,
-            'comentario': request.POST.get('comentario'),
-            'artista': request.POST.get('artista')
-        }
-        form = CrearComentarioForm(auto)
-        if form.is_valid():
-            form.save()
-            return redirect('blog:detalle', url=url)
-        else:
-            return HttpResponse(status=500)
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        form.instance.perfil = self.request.user.perfil
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        url = self.request.POST.get('url')
+        return reverse_lazy('blog:detalle', kwargs={'url': url})
+
+    def form_invalid(self, form):
+        return HttpResponseServerError("Error interno al procesar el formulario.")
+
+
+class ComentarioDeleteView(UserPassesTestMixin, DeleteView):
+    model = Comentario
+    login_url = reverse_lazy('auth:login')
+
+    def test_func(self):
+        grupos = ['Administrador']
+        return self.request.user.is_authenticated and any(self.request.user.groups.filter(name=grupo).exists() for grupo in grupos) or self.request.user == self.get_object().user
+
+    def get_success_url(self):
+        url = self.object.artista.url
+        return reverse_lazy('blog:detalle', kwargs={'url': url})
+
 
 
 class CancionListView(ListView):
