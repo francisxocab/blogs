@@ -30,9 +30,9 @@ urlpatterns = [
         name='detalle'
     ),
         path(
-        route='carga_artista/',
+        route='cargar_artista/',
         view=ArtistaCreateView.as_view(),
-        name='carga_artista'
+        name='cargar_artista'
     ),
         path(
         route='actualizar_artista/<slug:url>/',

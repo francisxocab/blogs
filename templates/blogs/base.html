@@ -78,7 +78,7 @@
 
                     {% if user.groups.all.0.name == 'Colaborador' or user.groups.all.0.name == 'Administrador' %}
 
-                      <li><a class="dropdown-item" href="{% url 'blog:carga_artista' %}">Cargar Artista</a></li>
+                      <li><a class="dropdown-item" href="{% url 'blog:cargar_artista' %}">Cargar Artista</a></li>
                       
                     {% endif %}
 
