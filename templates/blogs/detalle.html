@@ -13,7 +13,7 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="text-content">
-                <h4>Detalle Artista {{ artista.cancion_disco }}</h4>
+                <h4>Detalle Artista {{ artista.cancion}}</h4>
                 <h2>MySpecials</h2>
               </div>
             </div>
@@ -35,7 +35,7 @@
                     </div>
                     <div class="down-content">
                       <span>{{ artista.resumen|safe}}</span>
-                      <h4>{{ artista.cancion_disco }}</h4>
+                      <h4>{{ artista.cancion }}</h4>
                       <ul class="post-info">
                         <li><a href={% url 'blog:user' artista.user %}>{{ artista.user }}</a></li>
                         <li><a href="#">{{ artista.creado}}</a></li>
@@ -211,7 +211,7 @@
               <div class="col-lg-12">
                 <div class="sidebar-item categories">
                   <div class="sidebar-heading">
-                    <h2>Marcas</h2>
+                    <h2>Categorías</h2>
                   </div>
                   <div class="content">
                     <ul>

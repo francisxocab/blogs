@@ -1,6 +1,6 @@
 from django import forms
 from ckeditor.widgets import CKEditorWidget
-from .models import Comentario, Artista, CancionDisco, Contacto
+from .models import Comentario, Artista, Contacto
 
 
 class CrearComentarioForm(forms.ModelForm):
@@ -15,7 +15,7 @@ class CrearComentarioForm(forms.ModelForm):
 class AutoForm(forms.ModelForm):
     class Meta:
         model = Artista
-        fields = ['titulo', 'resumen', 'contenido', 'destacado', 'cancion_disco',
+        fields = ['titulo', 'resumen', 'contenido', 'destacado',
                   'visible', 'debut', 'imagen']
 
     titulo = forms.CharField(
@@ -32,25 +32,25 @@ class AutoForm(forms.ModelForm):
     )
     destacado = forms.BooleanField(
         widget=forms.CheckboxInput(),
-    )
-    cancion_disco = forms.ModelChoiceField(
-        queryset=CancionDisco.objects.all(),
-        widget=forms.Select(attrs={'class': 'form-control'})
+    
     )
     visible = forms.BooleanField(
         required=False,
         widget=forms.CheckboxInput()
+    )    
+    debut = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
     )
     imagen = forms.ImageField(
         widget=forms.FileInput(attrs={'class': 'form-control-file'})
     )
     
-    class ContactoForm(forms.ModelForm):
+class ContactoForm(forms.ModelForm):
         class Meta:
             model = Contacto
             fields = ('nombre', 'email', 'asunto', 'mensaje')
 
-    nombre = forms.CharField(
+        nombre = forms.CharField(
         required=True,
         widget=forms.TextInput(
             attrs={
@@ -58,7 +58,7 @@ class AutoForm(forms.ModelForm):
                 'placeholder': 'Nombre y Apellido'}
         )
     )
-    email = forms.EmailField(
+        email = forms.EmailField(
         required=True,
         widget=forms.TextInput(
             attrs={
@@ -66,7 +66,7 @@ class AutoForm(forms.ModelForm):
                 'placeholder': 'Email'}
         )
     )
-    asunto = forms.CharField(
+        asunto = forms.CharField(
         required=True,
         widget=forms.TextInput(
             attrs={
@@ -74,7 +74,7 @@ class AutoForm(forms.ModelForm):
                 'placeholder': 'Asunto'}
         )
     )
-    mensaje = forms.CharField(
+        mensaje = forms.CharField(
         required=True,
         widget=forms.Textarea(
             attrs={

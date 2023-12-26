@@ -1,7 +1,7 @@
 {% extends "blogs/base.html" %}
 {% load static %}
 
-{% block titulo %}¡Registro exitoso!{% endblock titulo %}
+{% block titulo %}Registro OK{% endblock titulo %}
 
 {% block contenido %}
 
@@ -12,7 +12,7 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="text-content">
-                <h4>Eliminar Artista {{ object.cancion }}</h4>
+                <h4>Eliminar Artista {{ object.cancion}}</h4>
                 <h2>MySpecials</h2>
               </div>
             </div>
@@ -32,9 +32,9 @@
                   <div class="row justify-content-center">
                     <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
       
-                        <p>¿Estás seguro de que deseas eliminar "{{ object.cancion }}"?</p>
+                        <p>¿Estás seguro de que deseas eliminar "{{ object.comentario }}"?</p>
 
-                      <form class="mx-1 mx-md-4" method="POST">
+                      <form class="mx-1 mx-md-4" method="post" action="{% url 'blog:eliminar_comentario' pk=object.pk %}">
                         {% csrf_token %}
       
                         {% if form.errors %}
@@ -53,7 +53,7 @@
                         {% endif %}
       
                         <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                          <a class="btn btn-danger btn-lg" href="{% url "blog:detalle" object.url %}">Cancelar</a>
+                          <a class="btn btn-danger btn-lg" href="{% url 'blog:detalle' url=object.artista.url %}">Cancelar</a>
                           <button type="submit" class="btn btn-primary btn-lg">Eliminar</button>
                         </div>
       

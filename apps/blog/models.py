@@ -22,17 +22,6 @@ class Cancion(models.Model):
     def __str__(self):
         return self.nombre
 
-class CancionDisco(models.Model):
-    cancion = models.ForeignKey(Cancion, on_delete=models.CASCADE)
-    disco = models.ForeignKey(Disco, on_delete=models.CASCADE)
-    
-    class Meta:
-        ordering = ('cancion',)
-    
-    def __str__(self):
-        return f'{self.cancion} - {self.disco}'
-
-
 class Artista(models.Model):
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     perfil = models.ForeignKey(Perfil, on_delete=models.PROTECT)
@@ -42,8 +31,6 @@ class Artista(models.Model):
     contenido = RichTextField()
     vistas = models.PositiveIntegerField(default=0)
     destacado = models.BooleanField(default=False)
-    
-    cancion_disco = models.ForeignKey(CancionDisco, on_delete=models.PROTECT)
     visible = models.BooleanField(default=True)
     nombre = models.CharField(max_length=50)
     debut = models.PositiveIntegerField()
@@ -62,7 +49,7 @@ class Artista(models.Model):
     
     
     def __str__(self):
-        return f'{self.cancion_disco} - {self.user.username}'
+        return f'{self.debut} - {self.user.username}'
 
 
 class Comentario(models.Model):

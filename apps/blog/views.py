@@ -2,15 +2,12 @@ import os
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseServerError
-from django.contrib.auth.decorators import login_required
-from django.forms.models import BaseModelForm
-from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import TemplateView, ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic import TemplateView, FormView, ListView, DetailView, CreateView, UpdateView, DeleteView
 from .models import Cancion, Artista, Comentario
-from .forms import CrearComentarioForm, AutoForm
+from .forms import CrearComentarioForm, AutoForm, ContactoForm
 
 class ArtistaCreateView(UserPassesTestMixin, CreateView):
     model = Artista 
@@ -105,9 +102,13 @@ class InicioListView(ListView):
 class NosotrosTemplateView(TemplateView):
     template_name = 'blogs/nosotros.html'
 
+class ContactoFormView(FormView):
+    form_class = ContactoForm
+    template_name = 'blogs/contacto.html'
+    success_url = reverse_lazy('blogs:contactook')
 
 class ContactoTemplateView(TemplateView):
-    template_name = 'blogs/contacto.html'
+    template_name = 'blogs/contactook.html'
 
 
 class ArtistaDetailView(DetailView):
