@@ -7,41 +7,38 @@
 
 {% block contenido %}
 
-    <!-- Page Content -->
-    <!-- Banner Starts Here -->
-    <div class="main-banner header-text">
-      <div class="container-fluid">
-        <div class="owl-banner owl-carousel">
+                <!-- Page Content -->
+                <!-- Banner Starts Here -->
+                <div class="main-banner header-text">
+                  <div class="container-fluid">
+                    <div class="owl-banner owl-carousel">
 
 
-          <!-- Inicio Post Destacados -->
-          {%for artista in artistas_destacados%}
-          <div class="item">
-            <img src="{{artista.imagen.url}}" alt="">
-            <div class="item-content">
-            <div class="main-content">
-              <div class="meta-category">
-          <span> artista.titulo</span> <!-- REVISAR COMO FUNCA ESTO -->
-            </div>
-            <a href="{% url "blog:detalle" artista.url %}">
-              <h4> {{artista.resumen|safe }}</h4>  <!-- REVISAR COMO FUNCA ESTO -->
-            </a>
-              <ul class="post-info">
-                <li><a href="{% url "blog:user" artista.user %}">{{ artista.user }}</a></li>
-                <li><a href="#">{{ artista.creado|date:"M Y" }}</a></li>
-                <li><a href="#">Comentarios </a></li>
-              </ul>
-            </div>
-        </div>
-    </div>
-    {%endfor%}
-<!-- Fin Post Destacados -->
-
-
-        </div>
+                      <!-- Inicio Post Destacados -->
+                      {%for artista in artistas_destacados%}
+                      <div class="item">
+                        <img src="{{artista.imagen.url}}" alt="">
+                        <div class="item-content">
+                        <div class="main-content">
+                          <div class="meta-category">
+                      <span> Babasónicos </span> <!-- REVISAR COMO FUNCA ESTO -->
+                        </div>
+                        <a href="{% url "blog:detalle" artista.url %}">
+                          <h4> {{artista.resumen|safe }}</h4>  <!-- REVISAR COMO FUNCA ESTO -->
+                        </a>
+                          <ul class="post-info">
+                            <li><a href="{% url "blog:user" artista.user %}">{{ artista.user }}</a></li>
+                            <li><a href="#">{{ artista.creado|date:"M Y" }}</a></li>
+                          </ul>
+                        </div>
+                    </div>
+                </div>
+            {%endfor%}
+            <!-- Fin Post Destacados -->
+         </div>
       </div>
-    </div>
-    <!-- Banner Ends Here -->
+     </div>
+        <!-- Banner Ends Here -->
 
 
 
@@ -58,16 +55,16 @@
                   <div class="col-lg-12">
                     <div class="blog-post">
                       <div class="blog-thumb">
-                        <img src="{{artista.imagen.url}}" alt="">
+                        <img src="{{ artista.imagen.url }}" alt="">
                       </div>
                       <div class="down-content">
                         <span>{{artista.titulo}}</span> <!-- REVISAR COMO FUNCA ESTO -->
                         <a href="{% url "blog:detalle" artista.url %}">
-                          <h4>{{artista.cancion}}</h4></a>
+                          <h4>{{artista.cancion}}</h4>
+                        </a>
                         <ul class="post-info">
                           <li><a href={% url 'blog:user' artista.user %}>{{ artista.user }}</a></li>
                           <li><a href="#">{{ artista.creado|date:"M Y" }}</a></li>
-                          <li><a href="#">12 Comments</a></li>
                         </ul>
                          {{artista.resumen|safe }} 
                         <div class="post-options">
@@ -78,9 +75,24 @@
                               <ul class="post-share">
                                 <li><i class="fa fa-share-alt"></i></li>
                                 <li><a href="#">Facebook</a>,</li>
-                                <li><a href="#"> Twitter</a></li>
                               </ul>
                             </div>
+                            {% if user.is_authenticated %}
+                            {% if artista.user|upper == user.username|upper or user.groups.all.0.name == 'Administrador' %}
+                              <div class="col-7">
+                                <ul class="post-share">
+                                  <li><i class="fa fa-pencil"></i></li>
+                                  <li><a href="{% url "blog:actualizar_artista" artista.url %}">Editar</a></li>
+                                </ul>
+                              </div>
+                              <div class="col-2">
+                                <ul class="post-share">
+                                  <li><i class="fa fa-trash"></i></li>
+                                  <li><a href="{% url "blog:eliminar_artista" artista.url %}">Eliminar</a></li>
+                                </ul>
+                              </div>
+                            {% endif %}
+                          {% endif %}
                           </div>
                         </div>
                       </div>

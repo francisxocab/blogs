@@ -67,7 +67,7 @@ class ArtistaDeleteView(UserPassesTestMixin, CreateView):
         return self.request.user.is_authenticated and any(self.request.user.groups.filter(name=grupo).exists() for grupo in grupos) or self.request.user == self.get_object().user
 
     def form_valid(self, form):
-        # Obtener el objeto Auto
+        # Obtener el objeto 
         artista = self.get_object()
 
         # Eliminar la imagen adociada
